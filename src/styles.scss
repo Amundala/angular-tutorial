@@ -3,6 +3,7 @@
 @import "primeng/resources/primeng.css";
 //=== Importing global variables ===
 @import "./styles/variables.scss";
+@import "./styles/theme-overrides.scss";
 
 html,
 body,
@@ -47,6 +48,9 @@ app-root {
 }
 .wrap {
   flex-wrap: wrap;
+}
+.gap-05 {
+  gap: 0.5rem;
 }
 .gap-1 {
   gap: 1rem;
