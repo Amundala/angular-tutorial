@@ -37,6 +37,7 @@ export interface Products {
   totalPages: number;
 }
 export interface Product {
+  id?: number;
   name: string;
   price: string;
   image: string;

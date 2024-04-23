@@ -10,4 +10,23 @@
     [readonly]="true"
     iconCancelClass="hidden"
   ></p-rating>
+
+  <div class="row">
+    <!-- Add Product Btn-->
+    <button
+      type="button"
+      pButton
+      icon="pi pi-plus"
+      (click)="editProduct()"
+      label="Edit"
+    ></button>
+    <!-- Add Product Btn-->
+    <button
+      type="button"
+      pButton
+      icon="pi pi-plus"
+      (click)="deleteProduct()"
+      label="Delete"
+    ></button>
+  </div>
 </div>
