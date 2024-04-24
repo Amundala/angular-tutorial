@@ -1,7 +1,17 @@
-<header class="wrapper row full-center">
+<header class="wrapper column full-center">
   <img
     src="../../../assets/images/oc-logo.svg"
     alt="The log is here my friend, this is our logo, you dig!"
     class="logo"
   />
+  <hr class="hr" />
+  <div class="row gap-1">
+    <a
+      routerLink="/"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      >Home</a
+    >
+    <a routerLink="/about" routerLinkActive="active">About</a>
+  </div>
 </header>
