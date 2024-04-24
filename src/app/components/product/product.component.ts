@@ -12,11 +12,20 @@ import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { TruncateNamePipe } from '../../pipes/truncate-name.pipe';
+import { PricePipe } from '../../pipes/price.pipe';
 
 @Component({
   selector: 'app-product',
   standalone: true,
-  imports: [RatingModule, FormsModule, ButtonModule, ConfirmPopupModule],
+  imports: [
+    RatingModule,
+    FormsModule,
+    ButtonModule,
+    ConfirmPopupModule,
+    TruncateNamePipe,
+    PricePipe,
+  ],
   providers: [ConfirmationService],
   templateUrl: './product.component.html',
   styleUrl: './product.component.scss',
@@ -44,6 +53,14 @@ export class ProductComponent {
   }
   deleteProduct() {
     this.delete.emit(this.product);
+  }
+
+  //=== Name Lenght fix ===
+  truncateName(name: string) {
+    if (name.length > 16) {
+      return name.slice(0, 16) + '....';
+    }
+    return name;
   }
   ngOnInit() {}
 }

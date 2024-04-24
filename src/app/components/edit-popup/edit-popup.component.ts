@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output, input } from '@angular/core';
 import { DialogModule } from 'primeng/dialog';
 import { Product } from '../../../types';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule } from '@angular/forms';
 import { RatingModule } from 'primeng/rating';
 import { ButtonModule } from 'primeng/button';
 
@@ -14,6 +14,14 @@ import { ButtonModule } from 'primeng/button';
   styleUrl: './edit-popup.component.scss',
 })
 export class EditPopupComponent {
+  constructor(private forms: FormBuilder) {}
+
+  productForm = this.forms.group({
+    name: ['', []],
+    image: ['', []],
+    price: ['', []],
+    rating: [0, []],
+  });
   @Input() display: boolean = false;
   @Output() displayChange = new EventEmitter<boolean>();
 
