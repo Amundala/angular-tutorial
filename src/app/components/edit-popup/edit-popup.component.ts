@@ -2,25 +2,44 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output, input } from '@angular/core';
 import { DialogModule } from 'primeng/dialog';
 import { Product } from '../../../types';
-import { FormBuilder, FormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormsModule,
+  ReactiveFormsModule,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { RatingModule } from 'primeng/rating';
 import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-edit-popup',
   standalone: true,
-  imports: [DialogModule, CommonModule, FormsModule, ButtonModule],
+  imports: [
+    DialogModule,
+    CommonModule,
+    FormsModule,
+    ButtonModule,
+    ReactiveFormsModule,
+  ],
   templateUrl: './edit-popup.component.html',
   styleUrl: './edit-popup.component.scss',
 })
 export class EditPopupComponent {
   constructor(private forms: FormBuilder) {}
-
+  specialCharacterValidator(): ValidatorFn {
+    return (control) => {
+      const hasSpecialCharacter = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(
+        control.value
+      );
+      return hasSpecialCharacter ? { hasSpecialCharacter: true } : null;
+    };
+  }
   productForm = this.forms.group({
-    name: ['', []],
+    name: ['', [Validators.required, this.specialCharacterValidator()]],
     image: ['', []],
-    price: ['', []],
-    rating: [0, []],
+    price: ['', [Validators.required]],
+    rating: [0],
   });
   @Input() display: boolean = false;
   @Output() displayChange = new EventEmitter<boolean>();
@@ -35,9 +54,27 @@ export class EditPopupComponent {
     rating: 0,
   };
 
+  ngOnChanges() {
+    this.productForm.patchValue(this.product);
+  }
+  // ngOnInit() {
+  //   this.productForm.patchValue({
+  //     name: this.product.name,
+  //     image: this.product.image,
+  //     price: this.product.price,
+  //     rating: this.product.rating,
+  //   });
+  // }
+
   //=== on confirm & on cancel fx ===
   onConfirm() {
-    this.confirm.emit(this.product);
+    const { name, image, price, rating } = this.productForm.value;
+    this.confirm.emit({
+      name: name || '',
+      image: image || '',
+      price: price || '',
+      rating: rating || 0,
+    });
     this.display = false;
     this.displayChange.emit(this.display);
   }

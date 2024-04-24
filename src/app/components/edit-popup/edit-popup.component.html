@@ -5,30 +5,27 @@
   closable="false"
 >
   <p-footer>
-    <div class="column gap-1">
+    <div class="column gap-1" [formGroup]="productForm">
       <!-- Name-->
       <div class="row gap-05">
         <span class="orice-label">Name:</span>
-        <input type="text" [(ngModel)]="product.name" />
+        <input type="text" formControlName="name" />
       </div>
 
       <!-- Name-->
       <div class="row gap-05">
         <span class="orice-label">Price:</span>
-        <input type="text" [(ngModel)]="product.price" />
+        <input type="text" formControlName="price" />
       </div>
 
       <!-- Image-->
       <div class="row gap-05">
         <span class="orice-label">Image</span>
-        <input type="text" [(ngModel)]="product.image" />
+        <input type="text" formControlName="image" />
       </div>
 
       <!-- Rating-->
-      <p-rating
-        [(ngModel)]="product.rating"
-        iconCancelClass="hidden"
-      ></p-rating>
+      <p-rating formControlName="rating" iconCancelClass="hidden"></p-rating>
     </div>
     <button
       type="button"
@@ -36,6 +33,7 @@
       icon="pi pi-check"
       (click)="onConfirm()"
       label="Confirm"
+      [class.disabled]="!productForm.valid"
     ></button>
     <button
       type="button"
