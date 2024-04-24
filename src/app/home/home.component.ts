@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ProductsService } from '../services/products.service';
 import { Product, Products } from '../../types';
 import { ProductComponent } from '../components/product/product.component';
 import { CommonModule } from '@angular/common';
-import { PaginatorModule } from 'primeng/paginator';
+import { Paginator, PaginatorModule } from 'primeng/paginator';
 import { EditPopupComponent } from '../components/edit-popup/edit-popup.component';
 import { ButtonModule } from 'primeng/button';
 
@@ -22,7 +22,7 @@ import { ButtonModule } from 'primeng/button';
 })
 export class HomeComponent {
   constructor(private produductService: ProductsService) {}
-
+  @ViewChild('paginator') paginator: Paginator | undefined;
   //=== create products array ===
   products: Product[] = [];
 
@@ -44,7 +44,12 @@ export class HomeComponent {
     this.selectedProduct = product;
     this.displayEditPopup = true;
   }
-  toggleDeletePopup(product: Product) {}
+  toggleDeletePopup(product: Product) {
+    if (!product.id) {
+      return;
+    }
+    this.deleteProduct(product.id);
+  }
   toggleAddPopup() {
     this.displayAddPopup = true;
   }
@@ -55,6 +60,11 @@ export class HomeComponent {
     }
     this.editProduct(product, this.selectedProduct.id);
     this.displayEditPopup = false;
+  }
+
+  //=== Dynamic Paginator ===
+  resetPagintor() {
+    this.paginator?.changePage(0);
   }
 
   //=== Confirm Add Modal ===
@@ -90,11 +100,12 @@ export class HomeComponent {
   //=== Edit Products f(x) ===
   editProduct(product: Product, id: number) {
     this.produductService
-      .editProduct(`http//localhost:3000/clothes/${id}`, product)
+      .editProduct(`http://localhost:3000/clothes/${id}`, product)
       .subscribe({
         next: (data) => {
           console.log(data, 'THE DATABABA');
           this.fetchProducts(0, this.rows);
+          this.resetPagintor();
         },
         error: (err) => console.log(err),
       });
@@ -102,11 +113,12 @@ export class HomeComponent {
   //=== Delete Products f(x) ===
   deleteProduct(id: number) {
     this.produductService
-      .deleteProduct(`http//localhost:3000/clothes/${id}`)
+      .deleteProduct(`http://localhost:3000/clothes/${id}`)
       .subscribe({
         next: (res) => {
           console.log(res, 'IS IT DELETED OUBIEN');
           this.fetchProducts(0, this.rows);
+          this.resetPagintor();
         },
         error: (err) => {
           console.log(err, 'ERREUR MON CHER ERRUER');
@@ -116,11 +128,12 @@ export class HomeComponent {
   //=== Add Products f(x) ===
   addProduct(product: Product) {
     this.produductService
-      .addProduct(`http//localhost:3000/clothes`, product)
+      .addProduct(`http://localhost:3000/clothes`, product)
       .subscribe({
         next: (data) => {
           console.log('Holla Mamita');
           this.fetchProducts(0, this.rows);
+          this.resetPagintor();
         },
         error: (err) => {
           console.log(err, 'HABAYE IKI');
